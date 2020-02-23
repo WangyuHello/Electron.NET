@@ -1,7 +1,7 @@
 ﻿const { app } = require('electron');
 const { BrowserWindow } = require('electron');
 const path = require('path');
-const process = require('child_process').spawn;
+const spawn = require('child_process').spawn;
 const portscanner = require('portscanner');
 const imageSize = require('image-size');
 let io, server, browserWindows, ipc, apiProcess, loadURL;
@@ -164,7 +164,7 @@ function startAspCoreBackend(electronPort) {
     function startBackend(aspCoreBackendPort) {
         console.log('ASP.NET Core Port: ' + aspCoreBackendPort);
         loadURL = `http://localhost:${aspCoreBackendPort}`;
-        const parameters = [`/electronPort=${electronPort}`, `/electronWebPort=${aspCoreBackendPort}`];
+        const parameters = [`/electronPort=${electronPort}`, `/electronWebPort=${aspCoreBackendPort}`].concat(process.argv);
         let binaryFile = manifestJsonFile.executable;
 
         const os = require('os');
@@ -174,7 +174,7 @@ function startAspCoreBackend(electronPort) {
 
         let binFilePath = path.join(currentBinPath, binaryFile);
         var options = { cwd: currentBinPath };
-        apiProcess = process(binFilePath, parameters, options);
+        apiProcess = spawn(binFilePath, parameters, options);
 
         apiProcess.stdout.on('data', (data) => {
             console.log(`stdout: ${data.toString()}`);
