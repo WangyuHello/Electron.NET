@@ -26,6 +26,11 @@ namespace ElectronNET.API
                 {
                     BridgeSettings.WebPort = argument.ToUpper().Replace("/ELECTRONWEBPORT=", "");
                 }
+                else if (argument.ToUpper().Contains("ELECTRONMAINWINID"))
+                {
+                    BridgeSettings.MainWinId = int.Parse(argument.ToUpper().Replace("/ELECTRONMAINWINID=", ""));
+                    Console.WriteLine("Main Window Id: " + BridgeSettings.MainWinId);
+                }
             }
 
             if(HybridSupport.IsElectronActive)

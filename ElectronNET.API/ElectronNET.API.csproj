@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageOutputPath>..\artifacts</PackageOutputPath>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
+    <!--<PackageOutputPath>..\artifacts</PackageOutputPath>-->
     <PackageId>ElectronNET.API</PackageId>
     <Authors>Gregor Biswanger, Robert Muehsig</Authors>
     <Company />
@@ -15,23 +15,23 @@ This package contains the API to access the "native" electron API.</Description>
     <RepositoryUrl>https://github.com/ElectronNET/Electron.NET/</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <PackageTags>electron aspnetcore</PackageTags>
+    <!--<PackageTags>electron aspnetcore</PackageTags>-->
     <PackageReleaseNotes>Changelog: https://github.com/ElectronNET/Electron.NET/blob/master/Changelog.md</PackageReleaseNotes>
-    <PackageIcon>PackageIcon.png</PackageIcon>
+    <!--<PackageIcon>PackageIcon.png</PackageIcon>-->
     <Version>99.0.0.0</Version>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!--<GenerateDocumentationFile>true</GenerateDocumentationFile>-->
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="PackageIcon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(OS)' == 'Windows_NT'">
+  <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(OS)' == 'Windows_NT'">
     <Exec Command="$(ProjectDir)devCleanup.cmd" IgnoreExitCode="true" />
   </Target>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(OS)' != 'Windows_NT'">
     <Exec Command="$(ProjectDir)devCleanup.sh" IgnoreExitCode="true" />
-  </Target>
+  </Target>-->
   <ItemGroup>
    <FrameworkReference Include="Microsoft.AspNetCore.App" />
 </ItemGroup>

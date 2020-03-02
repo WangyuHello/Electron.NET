@@ -15,6 +15,8 @@ if(app.commandLine.hasSwitch('manifest')) {
     manifestJsonFileName = app.commandLine.getSwitchValue('manifest');
 };
 
+let mainWinId;
+
 const currentBinPath = path.join(__dirname.replace('app.asar', ''), 'bin');
 const manifestJsonFilePath = path.join(currentBinPath, manifestJsonFileName);
 const manifestJsonFile = require(manifestJsonFilePath);
@@ -36,9 +38,11 @@ if (manifestJsonFile.singleInstance || manifestJsonFile.aspCoreBackendPort) {
 }
 
 app.on('ready', () => {
-    if (isSplashScreenEnabled()) {
-        startSplashScreen();
-    }
+    // if (isSplashScreenEnabled()) {
+    //     startSplashScreen();
+    // }
+
+    startApp();
 
     // hostname needs to belocalhost, otherwise Windows Firewall will be triggered.
     portscanner.findAPortNotInUse(8000, 65535, 'localhost', function (error, port) {
@@ -47,6 +51,21 @@ app.on('ready', () => {
     });
 
 });
+
+function startApp() {
+    let win = new BrowserWindow({
+        width: 1000,
+        height: 650,
+        frame: false,
+        titleBarStyle: "hiddenInset",
+        backgroundColor: "#FFF",
+        webPreferences: {
+            nodeIntegration: true
+        }
+    });
+
+    mainWinId = win.id;
+}
 
 function isSplashScreenEnabled() {
     if (manifestJsonFile.hasOwnProperty('splashscreen')) {
@@ -164,7 +183,7 @@ function startAspCoreBackend(electronPort) {
     function startBackend(aspCoreBackendPort) {
         console.log('ASP.NET Core Port: ' + aspCoreBackendPort);
         loadURL = `http://localhost:${aspCoreBackendPort}`;
-        const parameters = [`/electronPort=${electronPort}`, `/electronWebPort=${aspCoreBackendPort}`].concat(process.argv);
+        const parameters = [`/electronPort=${electronPort}`, `/electronWebPort=${aspCoreBackendPort}`, `/electronMainWinId=${mainWinId}`].concat(process.argv);
         let binaryFile = manifestJsonFile.executable;
 
         const os = require('os');

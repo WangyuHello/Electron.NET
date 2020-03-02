@@ -1,7 +1,8 @@
 "use strict";
 const electron_1 = require("electron");
 const path = require('path');
-const windows = [];
+// const windows = [];
+const windows = electron_1.BrowserWindow.getAllWindows();
 let window, lastOptions, electronSocket;
 module.exports = (socket, app) => {
     electronSocket = socket;

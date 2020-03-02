@@ -910,6 +910,11 @@ namespace ElectronNET.API
             WebContents = new WebContents(id);
         }
 
+        public BrowserWindow() : this(BridgeSettings.MainWinId)
+        {
+            
+        }
+
         /// <summary>
         /// Force closing the window, the unload and beforeunload event won’t be 
         /// emitted for the web page, and close event will also not be emitted 
@@ -1890,6 +1895,10 @@ namespace ElectronNET.API
         /// <param name="url"></param>
         public void LoadURL(string url)
         {
+            if (url.ToUpper() == "HTTP://LOCALHOST")
+            {
+                url = $"{url}:{BridgeSettings.WebPort}";
+            }
             BridgeConnector.Socket.Emit("browserWindowLoadURL", Id, url);
         }
 

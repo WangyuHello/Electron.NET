@@ -20,5 +20,7 @@
         /// The web port.
         /// </value>
         public static string WebPort { get; internal set; }
+
+        public static int MainWinId { get; internal set; }
     }
 }
