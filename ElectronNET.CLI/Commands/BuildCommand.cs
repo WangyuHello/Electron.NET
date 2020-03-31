@@ -21,7 +21,8 @@ namespace ElectronNET.CLI.Commands
                                                  "Optional: '/relative-path' to specify output a subdirectory for output." + Environment.NewLine +
                                                  "Optional: '/absolute-path to specify and absolute path for output." + Environment.NewLine +
                                                  "Optional: '/package-json' to specify a custom package.json file." + Environment.NewLine +
-                                                 "Optional: '/install-modules' to force node module install. Implied by '/package-json'"  + Environment.NewLine +                                 
+                                                 "Optional: '/install-modules' to force node module install. Implied by '/package-json'"  + Environment.NewLine +
+                                                 "Optional: '/fxdeps' publish a framework dependent package" + Environment.NewLine +                                 
                                                  "Full example for a 32bit debug build with electron prune: build /target custom win7-x86;win32 /dotnet-configuration Debug /electron-arch ia32  /electron-params \"--prune=true \"";
 
         public static IList<CommandOption> CommandOptions { get; set; } = new List<CommandOption>();
@@ -42,6 +43,7 @@ namespace ElectronNET.CLI.Commands
         private string _paramPackageJson = "package-json";
         private string _paramForceNodeInstall = "install-modules";
         private string _manifest = "manifest";
+        private string _fxdeps = "fxdeps";
 
         public Task<bool> ExecuteAsync()
         {
@@ -92,10 +94,17 @@ namespace ElectronNET.CLI.Commands
                 Console.WriteLine("Executing dotnet publish in this directory: " + tempPath);
 
                 string tempBinPath = Path.Combine(tempPath, "bin");
-
-                Console.WriteLine($"Build ASP.NET Core App for {platformInfo.NetCorePublishRid} under {configuration}-Configuration...");
-
-                var resultCode = ProcessHelper.CmdExecute($"dotnet publish -r {platformInfo.NetCorePublishRid} -c {configuration} --output \"{tempBinPath}\"", Directory.GetCurrentDirectory());
+                var resultCode = 0;
+                if (parser.Arguments.ContainsKey(_fxdeps))
+                {
+                    Console.WriteLine($"Build ASP.NET Core App under {configuration}-Configuration...");
+                    resultCode = ProcessHelper.CmdExecute($"dotnet publish -c {configuration} --output \"{tempBinPath}\"", Directory.GetCurrentDirectory());
+                }
+                else
+                {
+                    Console.WriteLine($"Build ASP.NET Core App for {platformInfo.NetCorePublishRid} under {configuration}-Configuration...");
+                    resultCode = ProcessHelper.CmdExecute($"dotnet publish -r {platformInfo.NetCorePublishRid} -c {configuration} --output \"{tempBinPath}\"", Directory.GetCurrentDirectory());
+                }
 
                 if (resultCode != 0)
                 {
